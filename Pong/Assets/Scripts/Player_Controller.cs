@@ -12,8 +12,14 @@ public class Player_Controller : MonoBehaviour
     private Vector2 _screenBounds;
     private float objectHeight;
 
+    private UI_Manager _uiManager;
+    private Ball_Controller _ballController;
+
+    private bool _canStart = true;
     void Start()
     {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
+        _ballController = GameObject.Find("Ball").GetComponent<Ball_Controller>();
         //Gets the boundaries of the camera view.
         _screenBounds = MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, MainCamera.transform.position.z));
         //Gets the hieght of the seletced game object
@@ -22,18 +28,17 @@ public class Player_Controller : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Space) && _canStart == true) 
+        {
+            _uiManager.StartGame();
+            _ballController.StartBallMovement();
+            _canStart = false;
+        }
         CalculateMovement();
     }
 
     private void CalculateMovement()
     {
-        //Get input for vertical movement
-        /*float verticalInput = Input.GetAxis("Vertical");
-        Debug.Log(verticalInput);
-        //Set the movement speed and axis
-        var movement = new Vector3(0, verticalInput, 0) * _moveSpeed * Time.deltaTime;
-        transform.position += movement;*/
-
         if (gameObject.tag == "Player")
         {
             if (Input.GetKey(KeyCode.W))
