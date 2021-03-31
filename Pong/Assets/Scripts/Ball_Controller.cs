@@ -7,7 +7,10 @@ public class Ball_Controller : MonoBehaviour
     private Rigidbody2D ballRb;
     private Vector3 lastVelocity;
     [SerializeField]
-    private Vector2 force = new Vector2(5.0f, 0);
+    private Vector2 force = new Vector2(0, 0);
+    [SerializeField]
+    public float _speed = 100.0f;
+    private int collisionCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +20,8 @@ public class Ball_Controller : MonoBehaviour
         {
             Debug.LogError("Ball GameObject missing Rigidbody2D!");
         }
-        ballRb.AddForce(force);
+        force = new Vector2(Random.Range(-100.0f, 100.0f), Random.Range(-100.0f, 100.0f));
+        ballRb.AddForce(force * _speed * Time.deltaTime);
     }
 
     // Update is called once per frame
@@ -28,12 +32,23 @@ public class Ball_Controller : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collider)
     {
-        Debug.Log("Collision : " + collider);
         if(collider.gameObject != null)
         {
-            var speed = lastVelocity.magnitude;
-            var direction = Vector3.Reflect(lastVelocity.normalized, collider.contacts[0].normal);
-            ballRb.velocity = direction * Mathf.Max(speed, 0f);
+            //if (collisionCount <= 0)
+            //{
+                var speed = lastVelocity.magnitude;
+                var direction = Vector3.Reflect(lastVelocity.normalized, collider.contacts[0].normal);
+                ballRb.velocity = direction * Mathf.Max(speed, 0f);
+                collisionCount++;
+            //}
+            //else
+            /*//{
+                var speed = lastVelocity.magnitude * collisionCount;
+                var direction = Vector3.Reflect(lastVelocity.normalized, collider.contacts[0].normal);
+                ballRb.velocity = direction * Mathf.Max(speed, 0f);
+                collisionCount++;
+            }
+            Debug.Log("Speed : " );*/
         }
     }
 }

@@ -27,13 +27,35 @@ public class Player_Controller : MonoBehaviour
 
     private void CalculateMovement()
     {
-        if (gameObject.tag == "Player") { 
-            //Get input for vertical movement
-            float verticalInput = Input.GetAxis("Vertical");
+        //Get input for vertical movement
+        /*float verticalInput = Input.GetAxis("Vertical");
+        Debug.Log(verticalInput);
+        //Set the movement speed and axis
+        var movement = new Vector3(0, verticalInput, 0) * _moveSpeed * Time.deltaTime;
+        transform.position += movement;*/
 
-            //Set the movement speed and axis
-            var movement = new Vector3(0, verticalInput, 0) * _moveSpeed * Time.deltaTime;
-            transform.position += movement;
+        if (gameObject.tag == "Player")
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.position += Vector3.up * _moveSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.position += Vector3.down * _moveSpeed * Time.deltaTime;
+            }
+        }
+
+        if (gameObject.tag == "Player 2")
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                transform.position += Vector3.up * _moveSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                transform.position += Vector3.down * _moveSpeed * Time.deltaTime;
+            }
         }
     }
 
