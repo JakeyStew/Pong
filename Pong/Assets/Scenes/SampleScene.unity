@@ -265,7 +265,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 5
+  m_Constraints: 7
 --- !u!212 &218350942
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -616,7 +616,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 5
+  m_Constraints: 7
 --- !u!1 &606106582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,6 +1478,11 @@ PrefabInstance:
       propertyPath: _gameManager
       value: 
       objectReference: {fileID: 363072142}
+    - target: {fileID: 2489970048785490353, guid: bea24b1f3ea7e504c8d057c587705243,
+        type: 3}
+      propertyPath: _speed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2489970048785490357, guid: bea24b1f3ea7e504c8d057c587705243,
         type: 3}
       propertyPath: m_Name

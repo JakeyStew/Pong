@@ -16,6 +16,7 @@ public class Ball_Controller : MonoBehaviour
 
     [SerializeField]
     private GameObject Ball;
+    private bool _wait = false;
 
     void Start()
     {
@@ -34,8 +35,20 @@ public class Ball_Controller : MonoBehaviour
 
     public void StartBallMovement()
     {
-        force = new Vector2(Random.Range(-100.0f, 100.0f), Random.Range(-100.0f, 100.0f));
-        ballRb.AddForce(force * _speed * Time.deltaTime);
+        //0 = Left, 1 = Right
+        int directionChoice = Random.Range(0, 2);
+        Debug.Log("Direction Choice : " + directionChoice);
+        switch(directionChoice)
+        {
+            case 0:
+                force = new Vector2(Random.Range(-60.0f, 0f), Random.Range(-60.0f, 0f));
+                ballRb.AddForce(force * _speed * Time.deltaTime, ForceMode2D.Impulse);
+                break;
+            case 1:
+                force = new Vector2(Random.Range(0f, 60.0f), Random.Range(0f, 60.0f));
+                ballRb.AddForce(force * _speed * Time.deltaTime, ForceMode2D.Impulse);
+                break;
+        }
     }
 
     void Update()
@@ -59,15 +72,33 @@ public class Ball_Controller : MonoBehaviour
         if (collider.gameObject.tag == "Player_1_Goal")
         {
             _gameManager.AddScore(1, 0);
-            Instantiate(Ball, new Vector3(0, 0, 0), Quaternion.identity);
-            Destroy(this.gameObject, 0.5f);
+            //Instantiate(Ball, new Vector3(0, 0, 0), Quaternion.identity);
+            //Destroy(this.gameObject, 0.5f);
         }
 
         if (collider.gameObject.tag == "Player_2_Goal")
         {
             _gameManager.AddScore(1, 1);
-            Instantiate(Ball, new Vector3(0, 0, 0), Quaternion.identity);
-            Destroy(this.gameObject, 0.5f);
+            //Instantiate(Ball, new Vector3(0, 0, 0), Quaternion.identity);
+            //Destroy(this.gameObject, 0.5f);
+        }
+        _wait = true;
+        StartCoroutine(WaitForReposition());
+    }
+
+    private IEnumerator WaitForReposition()
+    {
+        while(_wait)
+        {
+            //Print the time of when the function is first called.
+            //Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+            yield return new WaitForSeconds(1.0f);
+            transform.position = new Vector2(0, 0);
+            _wait = false;
+
+            //After we have waited 5 seconds print the time again.
+            //Debug.Log("Finished Coroutine at timestamp : " + Time.time);
         }
     }
 }
