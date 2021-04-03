@@ -6,17 +6,12 @@ public class Ball_Controller : MonoBehaviour
 {
     [SerializeField]
     private Game_Manager _gameManager;
-    private Rigidbody2D ballRb;
-    private Vector3 lastVelocity;
+    private Rigidbody2D _ballRb;
+    private Vector3 _lastVelocity;
     [SerializeField]
-    private Vector2 force = new Vector2(0, 0);
+    private Vector2 _forceDirection = new Vector2(0, 0);
     [SerializeField]
     public float _speed = 100.0f;
-    private int collisionCount = 0;
-
-    [SerializeField]
-    private GameObject Ball;
-    private bool _wait = false;
 
     void Start()
     {
@@ -26,8 +21,8 @@ public class Ball_Controller : MonoBehaviour
             Debug.LogError("Ball GameObject missing Game_Manager!");
         }
 
-        ballRb = GetComponent<Rigidbody2D>();
-        if(ballRb == null)
+        _ballRb = GetComponent<Rigidbody2D>();
+        if(_ballRb == null)
         {
             Debug.LogError("Ball GameObject missing Rigidbody2D!");
         }
@@ -35,35 +30,60 @@ public class Ball_Controller : MonoBehaviour
 
     public void StartBallMovement()
     {
-        //0 = Left, 1 = Right
-        int directionChoice = Random.Range(0, 2);
-        Debug.Log("Direction Choice : " + directionChoice);
+        int directionChoice = Random.Range(0, 2);   //0 = Left, 1 = Right
         switch(directionChoice)
         {
             case 0:
-                force = new Vector2(Random.Range(-60.0f, 0f), Random.Range(-60.0f, 0f));
-                ballRb.AddForce(force * _speed * Time.deltaTime, ForceMode2D.Impulse);
+                float degrees = Random.Range(110, 160);
+                float radians = degrees * Mathf.Deg2Rad;
+
+                float x = Mathf.Cos(radians);
+                float y = Mathf.Sin(radians);
+
+                Vector2 angle = new Vector2(x, y);
+
+                _forceDirection = angle;
+                _ballRb.AddForce(_forceDirection * _speed * Time.deltaTime, ForceMode2D.Impulse);
+
+                Debug.Log("Degrees : " + degrees);
+                Debug.Log("Radians : " + radians);
+                Debug.Log("X : " + x);
+                Debug.Log("Y : " + y);
+                Debug.Log("Angle : " + angle);
                 break;
             case 1:
-                force = new Vector2(Random.Range(0f, 60.0f), Random.Range(0f, 60.0f));
-                ballRb.AddForce(force * _speed * Time.deltaTime, ForceMode2D.Impulse);
+                degrees = Random.Range(70, 20);
+                radians = degrees * Mathf.Deg2Rad;
+
+                x = Mathf.Cos(radians);
+                y = Mathf.Sin(radians);
+
+                angle = new Vector2(x, y);
+
+                _forceDirection = angle;
+                _ballRb.AddForce(_forceDirection * _speed * Time.deltaTime, ForceMode2D.Impulse);
+
+                Debug.Log("Degrees : " + degrees);
+                Debug.Log("Radians : " + radians);
+                Debug.Log("X : " + x);
+                Debug.Log("Y : " + y);
+                Debug.Log("Angle : " + angle);
                 break;
         }
     }
 
     void Update()
     {
-        lastVelocity = ballRb.velocity;
+        _lastVelocity = _ballRb.velocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collider)
     {
         if(collider.gameObject != null)
         {
-            var speed = lastVelocity.magnitude;
-            var direction = Vector3.Reflect(lastVelocity.normalized, collider.contacts[0].normal);
-            ballRb.velocity = direction * Mathf.Max(speed, 0f);
-            collisionCount++;
+            var speed = _lastVelocity.magnitude;
+            var direction = Vector3.Reflect(_lastVelocity.normalized, collider.contacts[0].normal);
+            _ballRb.velocity = direction * Mathf.Max(speed, 0f);
         }
     }
 
@@ -71,34 +91,12 @@ public class Ball_Controller : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player_1_Goal")
         {
-            _gameManager.AddScore(1, 0);
-            //Instantiate(Ball, new Vector3(0, 0, 0), Quaternion.identity);
-            //Destroy(this.gameObject, 0.5f);
+            _gameManager.AddScore(1, "Player One");
         }
 
         if (collider.gameObject.tag == "Player_2_Goal")
         {
-            _gameManager.AddScore(1, 1);
-            //Instantiate(Ball, new Vector3(0, 0, 0), Quaternion.identity);
-            //Destroy(this.gameObject, 0.5f);
-        }
-        _wait = true;
-        StartCoroutine(WaitForReposition());
-    }
-
-    private IEnumerator WaitForReposition()
-    {
-        while(_wait)
-        {
-            //Print the time of when the function is first called.
-            //Debug.Log("Started Coroutine at timestamp : " + Time.time);
-
-            yield return new WaitForSeconds(1.0f);
-            transform.position = new Vector2(0, 0);
-            _wait = false;
-
-            //After we have waited 5 seconds print the time again.
-            //Debug.Log("Finished Coroutine at timestamp : " + Time.time);
+            _gameManager.AddScore(1, "Player Two");
         }
     }
 }

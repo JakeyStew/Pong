@@ -23,15 +23,15 @@ public class UI_Manager : MonoBehaviour
         _spaceToStartText.gameObject.SetActive(false);
     }
 
-    public void UpdateScoresText(int scoreToAdd, int playerTag)
+    public void UpdateScoresText(int playerScore, string playerTag)
     {
-        if (playerTag == 0)
+        if (playerTag == "Player One")
         {
-            _playerOneText.text = scoreToAdd.ToString();
+            _playerOneText.text = playerScore.ToString();
         }
-        else if (playerTag == 1)
+        else if (playerTag == "Player Two")
         {
-            _playerTwoText.text = scoreToAdd.ToString();
+            _playerTwoText.text = playerScore.ToString();
         }
     }
 }

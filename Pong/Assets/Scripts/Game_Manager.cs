@@ -21,19 +21,17 @@ public class Game_Manager : MonoBehaviour
         _playerTwoScore = 0;
     }
 
-    public void AddScore(int scoreToAdd, int playerTag)
+    public void AddScore(int addPoint, string playerTag)
     {
-        if (playerTag == 0)
+        if (playerTag == "Player One")
         {
-            _playerOneScore = _playerOneScore + scoreToAdd;
+            _playerOneScore = _playerOneScore + addPoint;
             _UIManager.UpdateScoresText(_playerOneScore, playerTag);
-            Debug.Log("Score Added to Player 1 :" + _playerOneScore);
         }
-        else if (playerTag == 1)
+        else if (playerTag == "Player Two")
         {
-            _playerTwoScore = _playerTwoScore + scoreToAdd;
+            _playerTwoScore = _playerTwoScore + addPoint;
             _UIManager.UpdateScoresText(_playerTwoScore, playerTag);
-            Debug.Log("Score Added to Player 2 :" + _playerTwoScore);
         }
     }
 }

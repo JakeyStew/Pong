@@ -15,24 +15,32 @@ public class Player_Controller : MonoBehaviour
     private UI_Manager _uiManager;
     private Ball_Controller _ballController;
 
-    private bool _canStart = true;
+    private bool _canStart = false;
     void Start()
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
         _ballController = GameObject.Find("Ball").GetComponent<Ball_Controller>();
-        //Gets the boundaries of the camera view.
+        if (_uiManager == null)
+        {
+            Debug.LogError("Player_Controller missing UI_Manager!");
+        }
+        if (_ballController == null)
+        {
+            Debug.LogError("Player_Controller missing Ball_Controller!");
+        }
+
         _screenBounds = MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, MainCamera.transform.position.z));
-        //Gets the hieght of the seletced game object
-        objectHeight = transform.GetComponent<SpriteRenderer>().bounds.extents.y; //extents = size of height / 2
+        objectHeight = transform.GetComponent<SpriteRenderer>().bounds.extents.y;
+        _canStart = true;
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && _canStart == true) 
+        if(Input.GetKeyDown(KeyCode.Space) && _canStart) 
         {
+            _canStart = false;
             _uiManager.StartGame();
             _ballController.StartBallMovement();
-            _canStart = false;
         }
         CalculateMovement();
     }
